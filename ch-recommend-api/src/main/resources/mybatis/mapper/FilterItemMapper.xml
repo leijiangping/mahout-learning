@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.chaohi.recommend.dao.FilterItemMapper">
+   <!--表名 -->
+	<sql id="tableName">
+		tbl_filter_item
+	</sql>
+	<!-- 实例与数据库映射 -->
+	<resultMap id="BaseResultMap" type="filterItem">
+	 			 <id column="id" property="id" javaType="Integer" />
+	</resultMap>
+
+	<!-- 字段 -->
+	<sql id="Field">
+           `id` 
+	</sql>
+
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+         `id` 
+	</sql>
+	
+	<!-- 更新字段 -->
+	<sql id="updateField">
+		        `id`=#{id} 
+	</sql>
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="String" resultMap="BaseResultMap">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+		where
+		`id` = #{id}
+	</select>
+	<!-- 通过条件获取数据 -->
+	<select id="findByParam" parameterType="map" resultMap="BaseResultMap">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+		<where> 
+      	   <if test="id!=null ">
+		          and id=#{id}
+		    </if>
+		</where> 
+	</select>
+	
+<select id="findByExample" parameterType="filterItem" resultType="filterItem"> 
+      select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+     <where> 
+      	   <if test="id!=null ">
+		      and  id=#{id} 
+		    </if>
+     </where>   
+  </select>
+  	
+	<!--根据id值集合查询记录集-->
+    <select id="findByIds"  parameterType="list"  resultMap="BaseResultMap">
+         select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+         where id in 
+        <foreach item="item" index="index" collection="list"
+            open="(" separator="," close=")"> #{item}
+        </foreach>
+    </select>
+	
+	<!-- 查询所有数据 -->
+	<select id="findAll" resultMap="BaseResultMap">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+	</select>
+	
+	<!-- 保存 -->
+	<insert id="save" parameterType="filterItem">
+		insert into
+		<include refid="tableName"></include>
+		(
+		<include refid="Field"></include>
+		) values (
+		<include refid="FieldValue"></include>
+		)
+	</insert>
+	
+	<!-- 更新 -->
+	<update id="update" parameterType="filterItem">
+		update
+		<include refid="tableName"></include>
+		set
+		<include refid="updateField"></include>
+		where
+		`id` = #{id}
+	</update>
+	
+	<!--批量删除FilterItem-->
+     <select id="deleteMany" parameterType="list">
+	        <foreach collection="list" item="item" separator=";">
+	            delete from tbl_filter_item where id =  #{item}
+	        </foreach>
+	 </select>
+	  
+	 <!--按主键删除FilterItem-->
+	<delete id="deleteOne" parameterType="String">
+		delete from tbl_filter_item 	
+		<where>
+		   `id` = #{id}
+		</where>
+	</delete>
+	</mapper> 
