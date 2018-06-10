@@ -1,9 +1,0 @@
-server:
-  port: 8080
-  contextPath: /restApi
-liquibase:
-  change-log: classpath:config/liquibase/master.xml
-  default-schema: ch_recommend
-logging:
-  level: debug
-   
